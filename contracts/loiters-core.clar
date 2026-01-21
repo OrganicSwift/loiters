@@ -178,7 +178,7 @@
       longest-streak: u0,
       total-endorsements-received: u0,
       total-endorsements-given: u0,
-      joined-at: stacks-block-height,
+      joined-at: stacks-stacks-block-height,
       last-checkin: u0
     })
     
@@ -189,7 +189,7 @@
       type: "user-registered",
       user: tx-sender,
       username: username,
-      timestamp: stacks-block-height
+      timestamp: stacks-stacks-block-height
     })
     
     (ok true)
@@ -219,7 +219,7 @@
     (
       (user-data (unwrap! (map-get? users tx-sender) ERR-USER-NOT-REGISTERED))
       (last-checkin (get last-checkin user-data))
-      (current-time block-height)
+      (current-time stacks-block-height)
       (time-since-last (- current-time last-checkin))
       (checkin-count (get-user-checkin-count tx-sender))
       (new-streak (if (and (> last-checkin u0) (<= time-since-last CHECKIN-COOLDOWN))
@@ -275,7 +275,7 @@
       (endorser-data (unwrap! (map-get? users tx-sender) ERR-USER-NOT-REGISTERED))
       (endorsed-data (unwrap! (map-get? users endorsed) ERR-USER-NOT-REGISTERED))
       (last-endorsement (default-to u0 (map-get? endorsement-cooldowns {endorser: tx-sender, endorsed: endorsed})))
-      (current-time block-height)
+      (current-time stacks-block-height)
       (time-since-last (- current-time last-endorsement))
       (endorser-reputation (get reputation-score endorser-data))
       (reputation-bonus (/ endorser-reputation u100)) ;; 1% of endorser's reputation
