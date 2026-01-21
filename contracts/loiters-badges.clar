@@ -158,7 +158,7 @@
     (
       (new-badge-id (+ (var-get last-badge-id) u1))
       (badge-type-data (unwrap! (map-get? badge-type-info badge-type) ERR-NOT-FOUND))
-      (metadata-uri (concat (var-get base-token-uri) (uint-to-string badge-type)))
+      (metadata-uri (var-get base-token-uri)) ;; Simplified - just use base URI
     )
     ;; Check if user already has this badge
     (asserts! (not (has-badge recipient badge-type)) ERR-ALREADY-CLAIMED)
@@ -215,7 +215,7 @@
 )
 
 ;; Helper function to check if user meets badge criteria
-(define-private (check-badge-criteria (badge-type uint) (user-data {
+(define-read-only (check-badge-criteria (badge-type uint) (user-data {
   username: (string-utf8 32),
   bio: (string-utf8 256),
   avatar-uri: (string-utf8 256),
@@ -270,14 +270,6 @@
         )
       )
     )
-  )
-)
-
-;; Helper function to convert uint to string (simplified version)
-(define-private (uint-to-string (value uint))
-  (if (<= value u9)
-    (unwrap-panic (element-at "0123456789" value))
-    (concat (uint-to-string (/ value u10)) (unwrap-panic (element-at "0123456789" (mod value u10))))
   )
 )
 
