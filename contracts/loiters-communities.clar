@@ -155,7 +155,7 @@
       description: description,
       image-uri: image-uri,
       owner: tx-sender,
-      created-at: block-height,
+      created-at: stacks-block-height,
       is-private: is-private,
       member-count: u1,
       max-members: max-members,
@@ -166,7 +166,7 @@
     ;; Add creator as owner/member
     (map-set community-members {community-id: new-community-id, member: tx-sender} {
       role: ROLE-OWNER,
-      joined-at: block-height,
+      joined-at: stacks-block-height,
       contribution-score: u0
     })
     
@@ -181,7 +181,7 @@
       community-id: new-community-id,
       name: name,
       owner: tx-sender,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok new-community-id)
@@ -206,7 +206,7 @@
     ;; Add member
     (map-set community-members {community-id: community-id, member: tx-sender} {
       role: ROLE-MEMBER,
-      joined-at: block-height,
+      joined-at: stacks-block-height,
       contribution-score: u0
     })
     
@@ -219,7 +219,7 @@
       type: "member-joined",
       community-id: community-id,
       member: tx-sender,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok true)
@@ -248,7 +248,7 @@
       type: "member-left",
       community-id: community-id,
       member: tx-sender,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok true)
@@ -278,8 +278,8 @@
       title: title,
       description: description,
       proposal-type: proposal-type,
-      created-at: block-height,
-      voting-ends-at: (+ block-height voting-period),
+      created-at: stacks-block-height,
+      voting-ends-at: (+ stacks-block-height voting-period),
       votes-for: u0,
       votes-against: u0,
       executed: false,
@@ -294,7 +294,7 @@
       proposal-id: new-proposal-id,
       proposer: tx-sender,
       title: title,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok new-proposal-id)
@@ -311,7 +311,7 @@
       (voting-power (+ (get reputation-score user-data) (get contribution-score member-info)))
     )
     ;; Check voting is still open
-    (asserts! (<= block-height (get voting-ends-at proposal)) ERR-NOT-AUTHORIZED)
+    (asserts! (<= stacks-block-height (get voting-ends-at proposal)) ERR-NOT-AUTHORIZED)
     
     ;; Check hasn't already voted
     (asserts! (is-none (get-vote community-id proposal-id tx-sender)) ERR-NOT-AUTHORIZED)
@@ -320,7 +320,7 @@
     (map-set proposal-votes {community-id: community-id, proposal-id: proposal-id, voter: tx-sender} {
       vote: vote-for,
       voting-power: voting-power,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     ;; Update vote counts
@@ -338,7 +338,7 @@
       voter: tx-sender,
       vote-for: vote-for,
       voting-power: voting-power,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok true)
@@ -353,7 +353,7 @@
       (member-info (unwrap! (get-member-info community-id tx-sender) ERR-NOT-MEMBER))
     )
     ;; Check voting has ended
-    (asserts! (> block-height (get voting-ends-at proposal)) ERR-NOT-AUTHORIZED)
+    (asserts! (> stacks-block-height (get voting-ends-at proposal)) ERR-NOT-AUTHORIZED)
     
     ;; Check not already executed
     (asserts! (not (get executed proposal)) ERR-NOT-AUTHORIZED)
@@ -373,7 +373,7 @@
       community-id: community-id,
       proposal-id: proposal-id,
       executor: tx-sender,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok true)
@@ -404,7 +404,7 @@
       member: member,
       new-role: new-role,
       updated-by: tx-sender,
-      timestamp: block-height
+      timestamp: stacks-block-height
     })
     
     (ok true)
