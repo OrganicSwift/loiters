@@ -5,6 +5,14 @@ authors = []
 telemetry = false
 cache_dir = "./.cache"
 
+[contracts.sip-010-trait]
+path = "contracts/sip-010-trait.clar"
+epoch = "latest"
+
+[contracts.nft-trait]
+path = "contracts/nft-trait.clar"
+epoch = "latest"
+
 [contracts.loiters-errors]
 path = "contracts/loiters-errors.clar"
 epoch = "latest"

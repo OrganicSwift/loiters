@@ -1,7 +1,7 @@
 ;; Loiters Badges (NFT Achievement System)
 ;; SIP-009 Non-Fungible Token for achievement badges
 
-(impl-trait 'SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait.nft-trait)
+(impl-trait .nft-trait.nft-trait)
 
 ;; Constants
 (define-constant CONTRACT-OWNER tx-sender)
@@ -33,7 +33,7 @@
 
 ;; Data Variables
 (define-data-var last-badge-id uint u0)
-(define-data-var base-token-uri (string-utf8 256) u"https://loiters.io/badges/")
+(define-data-var base-token-uri (string-ascii 256) "https://loiters.io/badges/")
 (define-data-var early-adopter-count uint u0)
 (define-data-var early-adopter-limit uint u1000)
 
@@ -50,7 +50,7 @@
     owner: principal,
     earned-at: uint,
     transferable: bool,
-    metadata-uri: (string-utf8 256)
+    metadata-uri: (string-ascii 256)
   }
 )
 
@@ -59,6 +59,7 @@
   {user: principal, badge-type: uint}
   uint ;; badge-id
 )
+
 
 ;; Badge type info
 (define-map badge-type-info
