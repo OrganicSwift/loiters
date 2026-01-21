@@ -1,0 +1,60 @@
+---
+id: 0
+name: Mainnet deployment
+network: mainnet
+stacks-node: "https://api.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoin.blockstack.com:8332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: loiters-core-v2
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 102090
+            path: contracts/loiters-core.clar
+            anchor-block-only: true
+            clarity-version: 4
+        - contract-publish:
+            contract-name: nft-trait
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 3230
+            path: contracts/nft-trait.clar
+            anchor-block-only: true
+            clarity-version: 4
+        - contract-publish:
+            contract-name: loiters-badges-v2
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 95810
+            path: contracts/loiters-badges.clar
+            anchor-block-only: true
+            clarity-version: 4
+        - contract-publish:
+            contract-name: loiters-communities-v2
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 131770
+            path: contracts/loiters-communities.clar
+            anchor-block-only: true
+            clarity-version: 4
+        - contract-publish:
+            contract-name: loiters-errors-v2
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 22150
+            path: contracts/loiters-errors.clar
+            anchor-block-only: true
+            clarity-version: 4
+        - contract-publish:
+            contract-name: sip-010-trait
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 4780
+            path: contracts/sip-010-trait.clar
+            anchor-block-only: true
+            clarity-version: 4
+        - contract-publish:
+            contract-name: loiters-token-v2
+            expected-sender: SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP
+            cost: 38570
+            path: contracts/loiters-token.clar
+            anchor-block-only: true
+            clarity-version: 4
+      epoch: "3.3"
