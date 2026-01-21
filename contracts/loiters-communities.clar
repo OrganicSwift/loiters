@@ -17,6 +17,7 @@
 (define-constant ERR-COMMUNITY-FULL (err u4006))
 (define-constant ERR-REQUIREMENTS-NOT-MET (err u4007))
 (define-constant ERR-INVALID-NAME (err u4008))
+(define-constant ERR-CONTRACT-PAUSED (err u4009))
 
 ;; Role constants
 (define-constant ROLE-OWNER u4)
@@ -26,6 +27,7 @@
 
 ;; Data Variables
 (define-data-var community-counter uint u0)
+(define-data-var contract-paused bool false)
 
 ;; Data Maps
 
@@ -144,8 +146,9 @@
     (
       (new-community-id (+ (var-get community-counter) u1))
       (name-len (len name))
-      (user-data (unwrap! (contract-call? .loiters-core get-user tx-sender) ERR-NOT-AUTHORIZED))
+      (user-data (unwrap! (contract-call? .loiters-core-v2 get-user tx-sender) ERR-NOT-AUTHORIZED))
     )
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (and (>= name-len MIN-COMMUNITY-NAME-LENGTH) (<= name-len MAX-COMMUNITY-NAME-LENGTH)) ERR-INVALID-NAME)
     (asserts! (> max-members u0) ERR-INVALID-PARAMS)
     
@@ -193,9 +196,10 @@
   (let
     (
       (community (unwrap! (map-get? communities community-id) ERR-COMMUNITY-NOT-FOUND))
-      (user-data (unwrap! (contract-call? .loiters-core get-user tx-sender) ERR-NOT-AUTHORIZED))
+      (user-data (unwrap! (contract-call? .loiters-core-v2 get-user tx-sender) ERR-NOT-AUTHORIZED))
       (current-members (get member-count community))
     )
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (not (is-member community-id tx-sender)) ERR-ALREADY-MEMBER)
     (asserts! (< current-members (get max-members community)) ERR-COMMUNITY-FULL)
     
@@ -269,6 +273,7 @@
       (new-proposal-id (+ proposal-count u1))
       (voting-period u1008) ;; ~7 days in blocks (assuming 10 min blocks)
     )
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     ;; Only members can create proposals
     (asserts! (>= (get role member-info) ROLE-MEMBER) ERR-NOT-MEMBER)
     
@@ -307,9 +312,10 @@
     (
       (proposal (unwrap! (get-proposal community-id proposal-id) ERR-NOT-AUTHORIZED))
       (member-info (unwrap! (get-member-info community-id tx-sender) ERR-NOT-MEMBER))
-      (user-data (unwrap! (contract-call? .loiters-core get-user tx-sender) ERR-NOT-AUTHORIZED))
+      (user-data (unwrap! (contract-call? .loiters-core-v2 get-user tx-sender) ERR-NOT-AUTHORIZED))
       (voting-power (+ (get reputation-score user-data) (get contribution-score member-info)))
     )
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     ;; Check voting is still open
     (asserts! (<= stacks-block-height (get voting-ends-at proposal)) ERR-NOT-AUTHORIZED)
     
@@ -408,5 +414,19 @@
     })
     
     (ok true)
+  )
+)
+
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (ok (var-set contract-paused true))
+  )
+)
+
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (ok (var-set contract-paused false))
   )
 )

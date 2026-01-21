@@ -251,7 +251,7 @@
     (var-set total-checkins (+ (var-get total-checkins) u1))
     
     ;; Mint reward tokens (will be implemented when token contract is integrated)
-    ;; (try! (contract-call? .loiters-token mint reward tx-sender))
+    ;; (try! (contract-call? .loiters-token-v2 mint reward tx-sender))
     
     (print {
       type: "checkin",
@@ -304,7 +304,7 @@
     }))
     
     ;; Reward endorsed user (will be implemented when token contract is integrated)
-    ;; (try! (contract-call? .loiters-token mint ENDORSEMENT-REWARD endorsed))
+    ;; (try! (contract-call? .loiters-token-v2 mint ENDORSEMENT-REWARD endorsed))
     
     (print {
       type: "endorsement",
