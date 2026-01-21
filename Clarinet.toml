@@ -13,23 +13,23 @@ epoch = "latest"
 path = "contracts/nft-trait.clar"
 epoch = "latest"
 
-[contracts.loiters-errors]
+[contracts.loiters-errors-v2]
 path = "contracts/loiters-errors.clar"
 epoch = "latest"
 
-[contracts.loiters-token]
+[contracts.loiters-token-v2]
 path = "contracts/loiters-token.clar"
 epoch = "latest"
 
-[contracts.loiters-core]
+[contracts.loiters-core-v2]
 path = "contracts/loiters-core.clar"
 epoch = "latest"
 
-[contracts.loiters-badges]
+[contracts.loiters-badges-v2]
 path = "contracts/loiters-badges.clar"
 epoch = "latest"
 
-[contracts.loiters-communities]
+[contracts.loiters-communities-v2]
 path = "contracts/loiters-communities.clar"
 epoch = "latest"
 

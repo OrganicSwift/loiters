@@ -10,6 +10,7 @@
 (define-constant ERR-ALREADY-CLAIMED (err u3002))
 (define-constant ERR-NOT-TRANSFERABLE (err u3003))
 (define-constant ERR-CRITERIA-NOT-MET (err u3004))
+(define-constant ERR-CONTRACT-PAUSED (err u3005))
 
 ;; Badge Types
 (define-constant BADGE-EARLY-ADOPTER u1)
@@ -34,6 +35,7 @@
 ;; Data Variables
 (define-data-var last-badge-id uint u0)
 (define-data-var base-token-uri (string-ascii 256) "https://loiters.io/badges/")
+(define-data-var contract-paused bool false)
 (define-data-var early-adopter-count uint u0)
 (define-data-var early-adopter-limit uint u1000)
 
@@ -127,6 +129,7 @@
     (
       (badge-info (unwrap! (map-get? badge-data badge-id) ERR-NOT-FOUND))
     )
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (is-eq tx-sender sender) ERR-NOT-AUTHORIZED)
     (asserts! (get transferable badge-info) ERR-NOT-TRANSFERABLE)
     (try! (nft-transfer? loiters-badge badge-id sender recipient))
@@ -161,6 +164,7 @@
       (badge-type-data (unwrap! (map-get? badge-type-info badge-type) ERR-NOT-FOUND))
       (metadata-uri (var-get base-token-uri)) ;; Simplified - just use base URI
     )
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     ;; Check if user already has this badge
     (asserts! (not (has-badge recipient badge-type)) ERR-ALREADY-CLAIMED)
     
@@ -207,7 +211,7 @@
 (define-public (claim-badge (badge-type uint))
   (let
     (
-      (user-data (unwrap! (contract-call? .loiters-core get-user tx-sender) ERR-NOT-AUTHORIZED))
+      (user-data (unwrap! (contract-call? .loiters-core-v2 get-user tx-sender) ERR-NOT-AUTHORIZED))
     )
     ;; Check criteria based on badge type
     (asserts! (check-badge-criteria badge-type user-data) ERR-CRITERIA-NOT-MET)
@@ -291,5 +295,19 @@
       rarity: rarity,
       transferable: transferable
     }))
+  )
+)
+
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (ok (var-set contract-paused true))
+  )
+)
+
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (ok (var-set contract-paused false))
   )
 )
