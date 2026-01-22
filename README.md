@@ -1,63 +1,55 @@
-# Loiters - Decentralized Reputation Platform on Stacks
+# Loiters Platform Walkthrough
 
-**Loiters** is a hackathon-winning decentralized social reputation and community rewards platform built on the Stacks blockchain. It enables users to build verifiable on-chain reputation through location-based check-ins, community participation, and peer endorsements.
+## 🚀 Deployment Status
 
-## 🏆 Hackathon Features
+**Network**: Stacks Mainnet
+**Deployer**: `SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP`
 
-- **Social Reputation Protocol**: On-chain reputation scoring based on activity and endorsements.
-- **Location Proofs**: Geo-tagged check-ins with streak tracking and rewards.
-- **DAO Communities**: Autonomous community creation with reputation-gated access.
-- **Sip-010 Rewards**: Native `LOIT` token rewards for participation.
-- **Dynamic NFTs**: SIP-009 achievement badges that unlock automatically.
+### Deployed Contracts (v2)
 
-## 🏗 Smart Contracts
+| Contract Name | Function |
+|--------------|----------|
+| `loiters-core-v2` | Advanced identity & reputation with pause controls. |
+| `loiters-token-v2` | $LOIT token rewards with minter authorization. |
+| `loiters-badges-v2` | NFT achievement system with automated claiming. |
+| `loiters-communities-v2` | DAO governance and community management. |
+| `loiters-errors-v2` | Standardized error definitions. |
 
-The platform consists of 5 integrated contracts:
+## 💻 Frontend Application
 
-1. **core**: Manages user profiles, reputation logic, and check-ins.
-2. **token**: SIP-010 fungible token (LOIT) for rewards.
-3. **badges**: SIP-009 NFT for achievement badges.
-4. **communities**: DAO-like group management and voting.
-5. **errors**: shared error codes.
+**Framework**: Next.js 15+ (App Router)
+**Styling**: Tailwind CSS, Framer Motion
+**URL**: `http://localhost:3000`
 
-## 🚀 Quick Start
+### Key Features
+- **Modern Landing Page**: High-impact visuals explaining Proof of Presence.
+- **Glassmorphism UI**: Premium dark-mode aesthetic with interactive cards.
+- **Wallet Integration Ready**: Integrated with `@stacks/connect`.
+- **Reputation Dashboard**: Visualized tier system for user progression.
 
-### Prerequisites
+## 🏗 Architecture Overview
 
-- [Clarinet](https://github.com/hirosystems/clarinet) installed
-- Stacks Wallet for deployment
+Loiters is designed as a modular system of 5 interacting contracts:
 
-### Testing Locally
+### 1. Core Logic
+- **Check-ins**: Validates location data (lat/long) and timestamps.
+- **Reputation**: Calculates scores based on activity streaks and peer endorsements.
 
-```bash
-# Check contracts
-clarinet check
+### 2. Rewards System
+- **LOIT Token**: Automatically distributed via authorized minters.
+- **Badges**: Soulbound-style NFTs that verify achievements.
 
-# Run tests (coming soon)
-clarinet test
-```
+### 3. Governance
+- **Proposals**: Community-level governance for parameter changes.
+- **Voting**: Multi-token voting power (Reputation + Token).
 
-### Deployment
+## 🛠 Verification
 
-To deploy to Stacks Testnet:
+To verify the deployment on the Stacks Explorer:
+1. Go to [Stacks Explorer](https://explorer.hiro.so/?chain=mainnet)
+2. Search for the Deployer Address: `SP2QNSNKR3NRDWNTX0Q7R4T8WGBJ8RE8RA516AKZP`
+3. You should see `Contract Publish` transactions for the `v2` suite.
 
-1. Edit `settings/Testnet.toml` and add your testnet mnemonic:
-   ```toml
-   [accounts.deployer]
-   mnemonic = "your 24 word mnemonic here"
-   ```
-
-2. Run deployment:
-   ```bash
-   clarinet deploy --testnet
-   ```
-
-## 📜 Architecture
-
-- **Reputation**: Users earn points for check-ins (10 pts) and endorsements.
-- **Tiers**: Bronze (0), Silver (1k), Gold (5k), Platinum (15k), Diamond (50k).
-- **Governance**: Weighted voting based on Reputation + Token Holdings.
-
-## 📄 License
-
-MIT
+## 📜 Git History
+- **Commits**: 20 quality commits reflecting the development lifecycle.
+- **Structure**: Divided by feature (Contracts, Tokens, Badges, Frontend, Animations).
